@@ -16,8 +16,7 @@ typedef struct
 
 typedef struct Node
 {
-    void *key;
-    void *value;
+    KeyValPair *val
     struct Node *left;
     struct Node *right;
 } Node;
