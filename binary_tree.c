@@ -53,6 +53,13 @@ void binary_tree_add(BinaryTree *bt, void *key, void *value){
                     pai->right = novo;
                 }
             }else{
+                if(bt->cmp_fn(key,pai->val->key) == 0){
+                    bt->val_destroy_fn(atual->val->value);
+                    bt->key_destroy_fn(key);
+                    atual->val->value = value;
+                    node_destroy(novo);
+                    break;
+                }
                 atual = pai->left;
                 if(atual == NULL){
                     pai->left = novo;
@@ -95,7 +102,6 @@ void binary_tree_destroy(BinaryTree *bt){
     free(bt);
 }
 
-//fazer até aqui para o primeiro testr
 void _trasplante(BinaryTree *bt, Node *pai_removendo, Node *mudando, Node *removendo){
     if(pai_removendo == NULL){
         bt->root = mudando;
