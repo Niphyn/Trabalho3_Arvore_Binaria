@@ -40,7 +40,7 @@ BinaryTree *binary_tree_construct(
     ValDestroyFn val_destroy_fn);
 void binary_tree_add(BinaryTree *bt, void *key, void *value);
 int binary_tree_empty(BinaryTree *bt);
-void binary_tree_remove(BinaryTree *bt, void *key);
+KeyValPair *binary_tree_remove(BinaryTree *bt, void *key);
 KeyValPair *binary_tree_min(BinaryTree *bt);
 KeyValPair *binary_tree_max(BinaryTree *bt);
 KeyValPair *binary_tree_pop_min(BinaryTree *bt);

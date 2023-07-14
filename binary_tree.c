@@ -1,6 +1,7 @@
 #include "binary_tree.h"
 #include<stdio.h>
-#include<stdlib.h> 
+#include<stdlib.h>
+#include<string.h>
 
 KeyValPair *key_val_pair_construct(void *key, void *val){
     KeyValPair *valor_par = (KeyValPair *)calloc(1,sizeof(KeyValPair));
@@ -25,7 +26,6 @@ Node *node_construct(void *key, void *value, Node *left, Node *right){
 
 //só pode chamar essa função depois que destruir o valor e a chave
 void node_destroy(Node *node){
-    key_val_pair_destroy(node->val);
     free(node);
 }
 
@@ -57,6 +57,7 @@ void binary_tree_add(BinaryTree *bt, void *key, void *value){
                     bt->val_destroy_fn(atual->val->value);
                     bt->key_destroy_fn(key);
                     atual->val->value = value;
+                    key_val_pair_destroy(novo->val);
                     node_destroy(novo);
                     break;
                 }
@@ -93,9 +94,12 @@ void *binary_tree_get(BinaryTree *bt, void *key){
 }
 
 void binary_tree_destroy(BinaryTree *bt){
-
+    KeyValPair *pair = NULL; 
     while(!binary_tree_empty(bt)){
-        binary_tree_remove(bt,bt->root->val->key);
+        pair = binary_tree_remove(bt,bt->root->val->key);
+        bt->key_destroy_fn(pair->key);
+        bt->val_destroy_fn(pair->value);
+        key_val_pair_destroy(pair);
     }
 
     bt->root = NULL;
@@ -114,9 +118,8 @@ void _trasplante(BinaryTree *bt, Node *pai_removendo, Node *mudando, Node *remov
     }
 }
 
-void binary_tree_remove(BinaryTree *bt, void *key){
+KeyValPair *binary_tree_remove(BinaryTree *bt, void *key){
 
-    //achando o no a ser removido e o seu pai
     Node *atual = bt->root, *pai = NULL;
     while(atual != NULL){
         if(bt->cmp_fn(key,atual->val->key) > 0){
@@ -160,36 +163,47 @@ void binary_tree_remove(BinaryTree *bt, void *key){
                 }
             }
         }
+        KeyValPair *pair = atual->val;
+        node_destroy(atual);
+        return pair;
     }
-
-    bt->key_destroy_fn(atual->val->key);
-    bt->val_destroy_fn(atual->val->value);
-    node_destroy(atual);
-
+    return NULL;
 }
 
-KeyValPair *binary_tree_min(BinaryTree *bt){
+Node *_binary_tree_min(BinaryTree *bt){
     Node *atual = bt->root;
     while(atual->left != NULL){
         atual = atual->left;
     }
-    return atual->val;
+    return atual;
 }
 
-KeyValPair *binary_tree_max(BinaryTree *bt){
+Node *_binary_tree_max(BinaryTree *bt){
     Node *atual = bt->root;
     while(atual->right != NULL){
         atual = atual->right;
     }
+    return atual;
+}
+
+KeyValPair *binary_tree_min(BinaryTree *bt){
+    Node *atual = _binary_tree_min((bt));
+    return atual->val;
+}
+
+KeyValPair *binary_tree_max(BinaryTree *bt){
+    Node *atual = _binary_tree_max(bt);
     return atual->val;
 }
 
 KeyValPair *binary_tree_pop_min(BinaryTree *bt){
-    return NULL;
+    KeyValPair *pair = binary_tree_min(bt);
+    return binary_tree_remove(bt,pair->key);
 }
 
 KeyValPair *binary_tree_pop_max(BinaryTree *bt){
-    return NULL;
+    KeyValPair *pair = binary_tree_max(bt); 
+    return binary_tree_remove(bt,pair->key);
 }
 
 // a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
