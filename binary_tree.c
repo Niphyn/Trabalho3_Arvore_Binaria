@@ -169,11 +169,19 @@ void binary_tree_remove(BinaryTree *bt, void *key){
 }
 
 KeyValPair *binary_tree_min(BinaryTree *bt){
-    return NULL;
+    Node *atual = bt->root;
+    while(atual->left != NULL){
+        atual = atual->left;
+    }
+    return atual->val;
 }
 
 KeyValPair *binary_tree_max(BinaryTree *bt){
-    return NULL;
+    Node *atual = bt->root;
+    while(atual->right != NULL){
+        atual = atual->right;
+    }
+    return atual->val;
 }
 
 KeyValPair *binary_tree_pop_min(BinaryTree *bt){

@@ -76,7 +76,6 @@ int main()
 
             Person *p = pair->value;
             printf("%s %d %.2f\n", p->name, p->idade, p->altura);
-            key_val_pair_destroy(pair);
         }
     }
 
