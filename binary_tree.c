@@ -10,11 +10,9 @@ KeyValPair *key_val_pair_construct(void *key, void *val){
     return valor_par; 
 }
 
-//só pode chamar essa função depois que destruir o valor e a chave
 void key_val_pair_destroy(KeyValPair *kvp){
     free(kvp);
 }
-
 
 Node *node_construct(void *key, void *value, Node *left, Node *right){
     Node *no = (Node *)calloc(1,sizeof(Node));
@@ -24,7 +22,6 @@ Node *node_construct(void *key, void *value, Node *left, Node *right){
     return no;
 }
 
-//só pode chamar essa função depois que destruir o valor e a chave
 void node_destroy(Node *node){
     free(node);
 }
@@ -206,6 +203,27 @@ KeyValPair *binary_tree_pop_max(BinaryTree *bt){
     return binary_tree_remove(bt,pair->key);
 }
 
+Vector *binary_tree_levelorder_traversal(BinaryTree *bt){
+    Vector *fila = vector_construct();
+    Vector *retorno = vector_construct();
+    Node *atual = NULL;
+    vector_push_back(fila,bt->root);
+    while(vector_size(fila)){
+        atual = (Node *)vector_pop_front(fila);
+        if(atual != NULL){
+            vector_push_back(retorno,atual->val);
+            if(atual->left != NULL){
+                vector_push_back(fila,atual->left);
+            }
+            if(atual->right != NULL){
+                vector_push_back(fila,atual->right);
+            }
+        }
+    }
+    vector_destroy(fila);
+    return retorno;
+}
+
 // a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
 // void binary_tree_print(BinaryTree *bt);
 
@@ -218,10 +236,6 @@ Vector *binary_tree_preorder_traversal(BinaryTree *bt){
 }
 
 Vector *binary_tree_postorder_traversal(BinaryTree *bt){
-    return NULL;
-}
-
-Vector *binary_tree_levelorder_traversal(BinaryTree *bt){
     return NULL;
 }
 
