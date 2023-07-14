@@ -120,40 +120,43 @@ void binary_tree_remove(BinaryTree *bt, void *key){
     Node *atual = bt->root, *pai = NULL;
     while(atual != NULL){
         if(bt->cmp_fn(key,atual->val->key) > 0){
+            pai = atual;
             atual = atual->right;
         }else{
             if(bt->cmp_fn(key,atual->val->key) == 0){
                 break;
             }else{
+                pai = atual;
                 atual = atual->left;
             }
         }
-        pai = atual;
     }
 
-    if((atual->right == NULL) &&(atual->left == NULL)){
-        _trasplante(bt,pai,NULL,atual);
-    }else{
-        if((atual->right != NULL)&&(atual->left == NULL)){
-            _trasplante(bt,pai,atual->right,atual);
+    if(atual != NULL){
+        if((atual->right == NULL) &&(atual->left == NULL)){
+            _trasplante(bt,pai,NULL,atual);
         }else{
-            if((atual->left != NULL)&&(atual->right == NULL)){
-                _trasplante(bt,pai,atual->left,atual);
+            if((atual->right != NULL)&&(atual->left == NULL)){
+                _trasplante(bt,pai,atual->right,atual);
             }else{
-                Node *minimo = atual->right, *minimo_pai = atual;
-                while(minimo->left != NULL){
-                    minimo_pai = minimo;
-                    minimo = minimo_pai->left;
-                }
-
-                if(minimo_pai == atual){
-                    _trasplante(bt,pai,minimo,atual);
-                    minimo->left = atual->left;
+                if((atual->left != NULL)&&(atual->right == NULL)){
+                    _trasplante(bt,pai,atual->left,atual);
                 }else{
-                    _trasplante(bt,minimo_pai,minimo->right,minimo);
-                    minimo->right = atual->right;
-                    minimo->left = atual->left;
-                    _trasplante(bt,pai,minimo,atual);
+                    Node *minimo = atual->right, *minimo_pai = atual;
+                    while(minimo->left != NULL){
+                        minimo_pai = minimo;
+                        minimo = minimo_pai->left;
+                    }
+
+                    if(minimo_pai == atual){
+                        _trasplante(bt,pai,minimo,atual);
+                        minimo->left = atual->left;
+                    }else{
+                        _trasplante(bt,minimo_pai,minimo->right,minimo);
+                        minimo->right = atual->right;
+                        minimo->left = atual->left;
+                        _trasplante(bt,pai,minimo,atual);
+                    }
                 }
             }
         }
