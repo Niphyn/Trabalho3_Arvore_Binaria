@@ -73,7 +73,10 @@ int main()
         else if (!strcmp(op, "POP"))
         {
             scanf("%s", cpf);
-            binary_tree_remove(bt, cpf);
+            KeyValPair *pair = binary_tree_remove(bt, cpf);
+            key_destroy_fn(pair->key);
+            val_destroy_fn(pair->value);
+            key_val_pair_destroy(pair);
         }
         else
         {
