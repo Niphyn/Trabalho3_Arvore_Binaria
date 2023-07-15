@@ -1,5 +1,5 @@
 all:
-	gcc -g -Wall -o main testr-09-main.c vector.c binary_tree.c
+	gcc -g -Wall -o main testr-07-main.c vector.c binary_tree.c
 	
 clean:
 	rm -f main 
