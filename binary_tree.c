@@ -260,12 +260,34 @@ Vector *binary_tree_inorder_traversal(BinaryTree *bt){
     return retorno;
 }
 
+Vector *binary_tree_postorder_traversal(BinaryTree *bt){
+    Vector *Q1 = vector_construct();
+    Vector *Q2 = vector_construct();
+    vector_push_back(Q1,bt->root);
+    Node *atual = NULL;
+    while(vector_size(Q1)){
+        atual = (Node *)vector_pop_back(Q1);
+        if(atual->left != NULL){
+            vector_push_back(Q1,atual->left);
+        }
+        if(atual->right != NULL){
+            vector_push_back(Q1,atual->right);
+        }
+        vector_push_back(Q2,atual->val);
+    }
+    vector_destroy(Q1);
+    int tam = vector_size(Q2);
+    Vector *retorno = vector_construct();
+    for(int i = tam - 1; i >= 0; i--){
+        void *atual_val = vector_get(Q2,i);
+        vector_push_back(retorno,atual_val);
+    }
+    vector_destroy(Q2);
+    return retorno;
+}
+
 // a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
 // void binary_tree_print(BinaryTree *bt);
-
-Vector *binary_tree_postorder_traversal(BinaryTree *bt){
-    return NULL;
-}
 
 Vector *binary_tree_inorder_traversal_recursive(BinaryTree *bt){
     return NULL;
