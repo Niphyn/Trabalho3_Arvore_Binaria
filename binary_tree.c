@@ -317,9 +317,19 @@ Vector *binary_tree_preorder_traversal_recursive(BinaryTree *bt){
     _preorder_traversal_recursive(retorno,bt->root);
     return retorno;
 }
-// a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
-// void binary_tree_print(BinaryTree *bt);
+
+void _postorder_traversal_recursive(Vector *v, Node *atual){
+    if(atual == NULL){
+        return;
+    }
+    _postorder_traversal_recursive(v,atual->left);
+    _postorder_traversal_recursive(v,atual->right);
+    vector_push_back(v,atual->val);
+    return;
+}
 
 Vector *binary_tree_postorder_traversal_recursive(BinaryTree *bt){
-    return NULL;
+    Vector *retorno = vector_construct();
+    _postorder_traversal_recursive(retorno,bt->root);
+    return retorno;
 }
